@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Allergy Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="center-wrapper text-bg">
+
+    <div class="prediction-card glass">
+
+        <h1>📝 Text-Based Allergy Prediction</h1>
+        <p class="subtitle">
+            Enter symptoms or food details to predict allergy risk
+        </p>
+
+        <form method="POST" action="/predict">
+
+            <label>Enter symptoms / food</label>
+            <textarea
+                name="text"
+                placeholder="Example: itching after peanuts"
+                rows="4"
+                required></textarea>
+
+            <button class="btn primary">🔍 Predict Allergy</button>
+        </form>
+
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

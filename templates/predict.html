@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Prediction | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="topnav">
+    <a href="/dashboard" class="topnav-logo"><span>🧬 AI Allergy</span></a>
+    <div class="topnav-links">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/predict" class="active">🤖 Predict</a>
+        <a href="/image">🖼 Image Scan</a>
+        <a href="/voice">🎙 Voice</a>
+        <a href="/history">📊 History</a>
+        <a href="/profile">👤 Profile</a>
+    </div>
+    <div class="topnav-right">
+        <a href="/logout" class="topnav-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="center-wrapper text-bg" style="padding-top:80px;">
+
+    <div class="glass predict-card">
+
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;background:linear-gradient(135deg,#0ea5e9,#14b8a6);border-radius:16px;font-size:1.6rem;margin-bottom:1.25rem;">🧪</div>
+
+        <h1>Text-Based Allergy Prediction</h1>
+        <p class="subtitle">Enter your symptoms or food items for AI analysis</p>
+
+        <form method="POST">
+            <div class="input-group" style="margin-bottom:1rem;">
+                <label>Describe your symptoms or food</label>
+                <input type="text" name="user_input"
+                       placeholder="e.g. skin rash after peanuts, breathing issues, milk allergy"
+                       required autofocus>
+            </div>
+
+            {% if error %}
+                <p style="color:#ef4444;font-size:0.85rem;margin-bottom:0.75rem;">⚠️ {{ error }}</p>
+            {% endif %}
+
+            <button type="submit" class="btn primary full-btn" style="margin-top:0.5rem;">
+                🔍 Analyze & Predict
+            </button>
+        </form>
+
+        <div style="margin-top:1.5rem;padding:1rem;background:#f0f9ff;border-radius:10px;border-left:3px solid #0ea5e9;">
+            <p style="font-size:0.8rem;color:#0284c7;font-weight:600;margin-bottom:6px;">💡 Example inputs:</p>
+            <p style="font-size:0.8rem;color:#64748b;line-height:1.7;">
+                • "I have a rash after eating milk"<br>
+                • "Breathing difficulty around dust"<br>
+                • "Peanut allergy with hives"<br>
+                • "Itchy skin after using soap"
+            </p>
+        </div>
+
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

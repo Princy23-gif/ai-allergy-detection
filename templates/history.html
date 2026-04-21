@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="topnav">
+    <a href="/dashboard" class="topnav-logo"><span>🧬 AI Allergy</span></a>
+    <div class="topnav-links">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/predict">🤖 Predict</a>
+        <a href="/image">🖼 Image Scan</a>
+        <a href="/voice">🎙 Voice</a>
+        <a href="/history" class="active">📊 History</a>
+        <a href="/profile">👤 Profile</a>
+    </div>
+    <div class="topnav-right">
+        <a href="/logout" class="topnav-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+<div class="page-container">
+
+    <div class="page-header">
+        <h1>📊 Prediction History</h1>
+        <p>Your complete allergy prediction record and AI analysis history</p>
+    </div>
+
+    {% if records %}
+
+    <div style="margin-bottom:1rem;padding:1rem 1.25rem;background:#f0f9ff;border-radius:12px;border-left:3px solid #0ea5e9;font-size:0.875rem;color:#0284c7;font-weight:500;">
+        📋 Showing {{ records | list | length }} prediction records
+    </div>
+
+    <div class="history-container">
+        {% for item in records %}
+        <div class="history-card">
+            <div class="history-row">
+                <span class="label">🕒 Date</span>
+                <span class="value">{{ item.date }}</span>
+            </div>
+            <div class="history-row">
+                <span class="label">📝 Input</span>
+                <span class="value">{{ item.input }}</span>
+            </div>
+            <div class="history-row">
+                <span class="label">🧬 Allergy</span>
+                <span class="value">{{ item.allergy }}</span>
+            </div>
+            <div class="history-row">
+                <span class="label">⚠️ Severity</span>
+                <span class="value"><span class="severity {{ item.severity|lower }}">{{ item.severity }}</span></span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% else %}
+
+    <div class="card" style="text-align:center;padding:3rem;">
+        <div style="font-size:3rem;margin-bottom:1rem;">📋</div>
+        <h3 style="color:#64748b;margin-bottom:0.5rem;">No predictions yet</h3>
+        <p class="empty-msg" style="padding:0;">Start by making your first allergy prediction.</p>
+        <a href="/predict" class="btn primary" style="margin-top:1.5rem;">🤖 Make a Prediction</a>
+    </div>
+
+    {% endif %}
+
+</div>
+</div>
+
+</body>
+</html>

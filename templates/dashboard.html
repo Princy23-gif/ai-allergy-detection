@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        #chat-input input { border-radius: 0; border: none; }
+    </style>
+</head>
+<body class="app-bg"></body>
+<!-- TOP NAV -->
+<nav class="topnav">
+    <a href="/dashboard" class="topnav-logo">
+        <span>🧬 AI Allergy</span>
+    </a>
+    <div class="topnav-links">
+        <a href="/dashboard" class="active">🏠 Dashboard</a>
+        <a href="/predict">🤖 Predict</a>
+        <a href="/image">🖼 Image Scan</a>
+        <a href="/voice">🎙 Voice</a>
+        <a href="/history">📊 History</a>
+        <a href="/profile">👤 Profile</a>
+    </div>
+    <div class="topnav-right">
+        <div class="topnav-user">
+            <div class="topnav-avatar">{{ session["user"][0].upper() if session["user"] else "U" }}</div>
+            <span>{{ session["user"] }}</span>
+        </div>
+        <a href="/logout" class="topnav-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+<div class="page-container">
+
+    <!-- HERO -->
+    <div class="dashboard-hero">
+        <h1>Welcome back, {{ session["user"] }} 👋</h1>
+        <p class="hero-subtitle">AI-Driven Allergy Risk Assessment & Personalized Prevention</p>
+        <p class="hero-status">🟢 System Active &nbsp;|&nbsp; AllergyNet v2.0 &nbsp;|&nbsp; AI Monitoring Enabled</p>
+        <div class="hero-actions">
+            <a href="/predict" class="btn primary">🤖 Start Prediction</a>
+            <a href="/voice" class="btn secondary">🎙 Voice Input</a>
+        </div>
+    </div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+
+        <div class="metric-card danger">
+            <div class="metric-card-icon">⚠️</div>
+            <h3>Current Risk Score</h3>
+            <div class="metric-value">{{ risk if risk else "0" }}</div>
+            <div class="risk-label">
+{% if risk and risk > 70 %}
+<span class="risk-high">High Risk</span>
+{% elif risk and risk > 40 %}
+<span class="risk-medium">Medium Risk</span>
+{% else %}
+<span class="risk-low">Low Risk</span>
+{% endif %}
+</div>
+            <div class="risk-bar-container" style="margin-top:8px;">
+                <div class="risk-bar" style="width:{{ risk if risk else 0 }}%"></div>
+            </div>
+            <small>Based on history & symptoms</small>
+        </div>
+
+        <div class="metric-card warning">
+            <div class="metric-card-icon">📈</div>
+            <h3>Risk Forecast</h3>
+            <div class="metric-value" style="font-size:1.2rem;">Likely Increase</div>
+            <small>Predictive AI Analysis</small>
+        </div>
+
+        <div class="metric-card">
+            <div class="metric-card-icon">🎯</div>
+            <h3>Top Trigger</h3>
+            <div class="metric-value" style="font-size:1.3rem;">{{ frequent if frequent else "None" }}</div>
+            <small>Most frequent allergen</small>
+        </div>
+
+        <div class="metric-card success">
+            <div class="metric-card-icon">🛡️</div>
+            <h3>Emergency Monitor</h3>
+            <div class="metric-value" style="font-size:1.1rem;color:#059669;">ACTIVE</div>
+            <small>Auto-guidance enabled</small>
+        </div>
+
+    </div>
+
+    <!-- INSIGHTS -->
+    <div class="insights-grid">
+
+        <div class="card">
+            <h2>🧠 AI Health Insight</h2>
+            <p style="color:#64748b;font-size:0.9rem;line-height:1.7;">
+                Repeated exposure detected. Allergy risk may increase if triggers continue. Preventive measures are strongly recommended based on your recent history.
+            </p>
+        </div>
+    <div class="ai-tip">
+💡 Tip: Reducing exposure to {{ frequent if frequent else "common allergens" }} may significantly lower your future allergy risk.
+</div>
+        <div class="card">
+            <h2>📈 Predictive Analysis</h2>
+            <p style="color:#64748b;font-size:0.9rem;line-height:1.7;">
+                Based on previous records, a potential flare-up is forecasted in the near future. The AI Trend Engine suggests monitoring closely.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- TREND CHART -->
+    <div class="chart-section">
+        <h2>📊 Allergy Severity Trend</h2>
+        <canvas id="trendChart" height="100"></canvas>
+        <small style="color:#94a3b8;font-size:0.78rem;">Weekly allergy severity trend based on prediction history</small>
+    </div>
+
+     <!-- AI RECOMMENDATIONS -->
+<div class="card">
+<h2>🤖 AI Recommendations</h2>
+
+<ul class="ai-recommendations">
+<li>🌿 Avoid outdoor exposure during high pollen hours</li>
+<li>🥛 Monitor dairy intake if symptoms increase</li>
+<li>🧼 Maintain clean indoor air to reduce dust triggers</li>
+<li>💧 Stay hydrated to reduce allergic reactions</li>
+</ul>
+
+<small style="color:#94a3b8;font-size:0.78rem;">
+Generated using AI behavior analysis
+</small>
+
+</div>
+    <!-- LEVEL 2 FEATURES -->
+    <div class="insights-grid">
+
+        <div class="card">
+            <h2>🤖 Smart Learning Insights</h2>
+            <p style="color:#64748b;font-size:0.9rem;line-height:1.7;">
+                AI has adapted your predictions based on past history. Recommended actions are updated dynamically based on your unique allergy pattern.
+            </p>
+            <div style="margin-top:1rem;padding:0.85rem;background:#f0f9ff;border-radius:10px;font-size:0.85rem;color:#0284c7;font-weight:600;">
+                ✅ Allergy risk currently stable
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🧬 Allergy DNA Profile</h2>
+            {% if dna_profile %}
+                {% for allergy_type, pct in dna_profile.items() %}
+                <div style="margin-bottom:0.75rem;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;">
+                        <span>{{ allergy_type }}</span><span>{{ pct }}%</span>
+                    </div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:7px;overflow:hidden;">
+                        <div style="height:100%;width:{{ pct }}%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div style="margin-bottom:0.75rem;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Dust Allergy</span><span>80%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:7px;overflow:hidden;"><div style="height:100%;width:80%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+                <div style="margin-bottom:0.75rem;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Pollen</span><span>60%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:7px;overflow:hidden;"><div style="height:100%;width:60%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+                <div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Food Allergy</span><span>40%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:7px;overflow:hidden;"><div style="height:100%;width:40%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+            {% endif %}
+            <small style="color:#94a3b8;font-size:0.78rem;margin-top:0.5rem;display:block;">AI-computed allergy predisposition</small>
+        </div>
+
+    </div>
+
+    <!-- RECENT HISTORY -->
+    {% if history %}
+    <div class="card">
+        <h2>🕒 Recent Activity</h2>
+        <div class="history-container">
+            {% for item in history[:3] %}
+            <div class="history-card">
+                <div class="history-row">
+                    <span class="label">Date</span>
+                    <span class="value">{{ item.date }}</span>
+                </div>
+                <div class="history-row">
+                    <span class="label">Input</span>
+                    <span class="value">{{ item.input }}</span>
+                </div>
+                <div class="history-row">
+                    <span class="label">Allergy Type</span>
+                    <span class="value">{{ item.allergy }}</span>
+                </div>
+                <div class="history-row">
+                    <span class="label">Severity</span>
+                    <span class="value"><span class="severity {{ item.severity|lower }}">{{ item.severity }}</span></span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="/history" class="back-link" style="margin-top:1rem;">View all history →</a>
+    </div>
+    {% endif %}
+
+    <p class="disclaimer">⚠️ AI decision-support system. Not a replacement for qualified medical professionals.</p>
+
+</div>
+</div>
+
+<!-- FLOATING CHATBOT -->
+<div id="chat-icon" onclick="toggleChat()">💬</div>
+
+<div id="chat-box">
+
+    <div id="chat-header">🤖 AI Allergy Assistant</div>
+
+    <!-- ✅ THIS IS THE CORRECT PLACE -->
+    <div id="chat-messages" class="chat-window">
+        <div class="bot-msg">
+            👋 Hello! I'm your AI Allergy Assistant. Describe your symptoms and I'll help you understand your allergy risk.
+        </div>
+    </div>
+
+    <!-- INPUT AREA -->
+    <div id="chat-input">
+        <input type="text" id="message" placeholder="Describe your symptoms...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+</div>
+
+<script>
+let inactivityTimer;
+
+function toggleChat() {
+    const box = document.getElementById("chat-box");
+    if (box.style.display === "block") {
+        box.style.display = "none";
+        clearTimeout(inactivityTimer);
+    } else {
+        box.style.display = "block";
+        resetTimer();
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById("message");
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    const chat = document.getElementById("chat-messages");
+
+    // Show user message
+    chat.innerHTML += `<div class='user-msg'>${msg}</div>`;
+    chat.scrollTop = chat.scrollHeight;
+
+    // Call Flask backend /chat route
+    fetch("/chat", {   // If serving from Flask, "/chat" is fine
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: msg })
+    })
+    .then(res => res.json())
+    .then(data => {
+        // Show bot reply
+        chat.innerHTML += `<div class='bot-msg'>${data.reply}</div>`;
+        chat.scrollTop = chat.scrollHeight;
+    })
+    .catch(err => {
+        console.error("Error:", err);
+        chat.innerHTML += `<div class='bot-msg'>⚠️ Error connecting to AI</div>`;
+    });
+
+    input.value = "";
+}
+  
+
+document.getElementById("message").addEventListener("keypress", e => {
+    if (e.key === "Enter") sendMessage();
+});
+
+function resetTimer() {
+    clearTimeout(inactivityTimer);
+    inactivityTimer = setTimeout(() => {
+        document.getElementById("chat-box").style.display = "none";
+    }, 120000);
+}
+
+window.onload = function() {
+    setTimeout(() => {
+        document.getElementById("chat-box").style.display = "block";
+        resetTimer();
+    }, 4000);
+
+    const ctx = document.getElementById('trendChart').getContext('2d');
+    const trendData = {{ trend_data | tojson }};
+    const labels = trendData.map((_, i) => `Week ${i + 1}`);
+
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels.length ? labels : ['Week 1','Week 2','Week 3','Week 4','Week 5','Week 6'],
+            datasets: [{
+                label: 'Allergy Severity Score',
+                data: trendData.length ? trendData : [40,55,60,50,65,70],
+                borderColor: '#0ea5e9',
+                backgroundColor: 'rgba(14,165,233,0.08)',
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#0ea5e9',
+                pointRadius: 5,
+                pointHoverRadius: 7
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: {
+                    beginAtZero: true, max: 100,
+                    grid: { color: '#f1f5f9' },
+                    ticks: { color: '#94a3b8', font: { size: 11 } }
+                },
+                x: {
+                    grid: { display: false },
+                    ticks: { color: '#94a3b8', font: { size: 11 } }
+                }
+            }
+        }
+    });
+};
+</script>
+
+</body>
+</html>

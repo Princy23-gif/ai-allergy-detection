@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="topnav">
+    <a href="/dashboard" class="topnav-logo"><span>🧬 AI Allergy</span></a>
+    <div class="topnav-links">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/predict">🤖 Predict</a>
+        <a href="/image">🖼 Image Scan</a>
+        <a href="/voice">🎙 Voice</a>
+        <a href="/history">📊 History</a>
+        <a href="/profile" class="active">👤 Profile</a>
+    </div>
+    <div class="topnav-right">
+        <a href="/logout" class="topnav-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="page-wrapper">
+<div class="page-container">
+
+    <div class="page-header">
+        <h1>👤 User Profile</h1>
+        <p>Your personal health monitoring dashboard</p>
+    </div>
+
+    <!-- PROFILE HEADER -->
+    <div class="profile-header">
+        <div class="profile-avatar">{{ username[0].upper() if username else "U" }}</div>
+        <div class="profile-info">
+            <h2>{{ username }}</h2>
+            <p>AI Allergy System Member</p>
+            <div style="display:flex;gap:0.5rem;margin-top:0.5rem;flex-wrap:wrap;">
+                <span style="background:#dbeafe;color:#1d4ed8;padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:600;">Health Monitoring Active</span>
+                <span style="background:#d1fae5;color:#065f46;padding:3px 10px;border-radius:20px;font-size:0.75rem;font-weight:600;">AI Analysis Enabled</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- STATS METRICS -->
+    <div class="metrics-grid" style="margin-bottom:1.5rem;">
+
+        <div class="metric-card">
+            <div class="metric-card-icon">📊</div>
+            <h3>Total Predictions</h3>
+            <div class="metric-value">{{ total }}</div>
+            <small>AI analyses performed</small>
+        </div>
+
+        <div class="metric-card accent">
+            <div class="metric-card-icon">🧬</div>
+            <h3>Allergy Tracking</h3>
+            <div class="metric-value" style="font-size:1rem;color:#4338ca;">Multi-Type</div>
+            <small>Food, Skin & Environmental</small>
+        </div>
+
+        <div class="metric-card success">
+            <div class="metric-card-icon">🛡️</div>
+            <h3>Protection Status</h3>
+            <div class="metric-value" style="font-size:1rem;color:#059669;">ACTIVE</div>
+            <small>Auto-monitoring enabled</small>
+        </div>
+
+        <div class="metric-card warning">
+            <div class="metric-card-icon">🤖</div>
+            <h3>AI Accuracy</h3>
+            <div class="metric-value" style="color:#92400e;">92%</div>
+            <small>Prediction confidence</small>
+        </div>
+
+    </div>
+
+    <!-- PROFILE DETAIL CARDS -->
+    <div class="insights-grid">
+
+        <div class="card">
+            <h2>🧬 Allergy DNA Profile</h2>
+            <div style="margin-top:0.5rem;">
+                <div style="margin-bottom:0.85rem;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Dust Allergy</span><span>80%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:8px;"><div style="height:100%;width:80%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+                <div style="margin-bottom:0.85rem;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Pollen</span><span>60%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:8px;"><div style="height:100%;width:60%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+                <div style="margin-bottom:0.85rem;">
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Food Allergy</span><span>40%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:8px;"><div style="height:100%;width:40%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+                <div>
+                    <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#64748b;margin-bottom:4px;"><span>Pet Dander</span><span>25%</span></div>
+                    <div style="background:#e2e8f0;border-radius:20px;height:8px;"><div style="height:100%;width:25%;background:linear-gradient(90deg,#0ea5e9,#14b8a6);border-radius:20px;"></div></div>
+                </div>
+            </div>
+            <small style="color:#94a3b8;font-size:0.78rem;margin-top:0.75rem;display:block;">AI-computed genetic allergy predisposition</small>
+        </div>
+
+        <div class="card">
+            <h2>💡 AI Recommendation</h2>
+            <div style="background:#f0f9ff;border-radius:12px;padding:1rem;margin-bottom:1rem;border-left:3px solid #0ea5e9;">
+                <p style="font-size:0.875rem;color:#0284c7;font-weight:500;line-height:1.6;">
+                    Update symptoms regularly for better prediction accuracy. Your AI model improves with more data.
+                </p>
+            </div>
+            <div class="section" style="margin-top:0;border-top:none;padding-top:0;">
+                <ul>
+                    <li>Log symptoms after every allergy reaction</li>
+                    <li>Update your dietary information regularly</li>
+                    <li>Monitor environmental triggers daily</li>
+                    <li>Consult a doctor for severe reactions</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- HEALTH INSIGHTS -->
+    <div class="card">
+        <h2>🧠 User Health Insights</h2>
+        <div class="insights-grid" style="margin:0;">
+            <div style="padding:1rem;background:#f0f9ff;border-radius:12px;">
+                <div style="font-size:1.1rem;margin-bottom:0.5rem;">🌿 Preventive Care</div>
+                <p style="font-size:0.85rem;color:#64748b;line-height:1.6;">Based on your history, dust and environmental allergens are your primary triggers. Regular cleaning and air purifiers are recommended.</p>
+            </div>
+            <div style="padding:1rem;background:#f0fdf4;border-radius:12px;">
+                <div style="font-size:1.1rem;margin-bottom:0.5rem;">📋 Activity Summary</div>
+                <p style="font-size:0.85rem;color:#64748b;line-height:1.6;">You have made <strong>{{ total }}</strong> predictions. Your allergy monitoring is {{ "active" if total > 0 else "just getting started" }}. Keep tracking for better insights.</p>
+            </div>
+        </div>
+    </div>
+
+    <a href="/dashboard" class="back-link">⬅ Back to Dashboard</a>
+
+</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="auth-bg">
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+
+        <div style="text-align:center; margin-bottom:1.5rem;">
+            <div style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;background:linear-gradient(135deg,#0ea5e9,#14b8a6);border-radius:18px;font-size:2rem;margin-bottom:1rem;">🧬</div>
+        </div>
+
+        <h1 class="system-title">Create Account</h1>
+        <p class="subtitle">Join AI Allergy System for personalized health monitoring</p>
+
+        <form method="POST" class="auth-form">
+
+            <div class="input-group">
+                <label>Username</label>
+                <input type="text" name="username" placeholder="Choose a username" required autocomplete="username">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" name="password" placeholder="Create a password" required autocomplete="new-password">
+            </div>
+
+            <button type="submit" class="btn secondary full-btn" style="margin-top:0.5rem;">
+                Create My Account
+            </button>
+
+        </form>
+
+        <div class="auth-links">
+            <p>Already have an account? <a href="/login">Login</a></p>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

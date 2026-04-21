@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="topnav">
+    <a href="/dashboard" class="topnav-logo"><span>🧬 AI Allergy</span></a>
+    <div class="topnav-links">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/predict" class="active">🤖 Predict</a>
+        <a href="/image">🖼 Image Scan</a>
+        <a href="/voice">🎙 Voice</a>
+        <a href="/history">📊 History</a>
+        <a href="/profile">👤 Profile</a>
+    </div>
+    <div class="topnav-right">
+        <a href="/logout" class="topnav-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="center-wrapper text-bg" style="padding-top:80px;align-items:flex-start;">
+
+    <div class="glass result-card" style="margin:2rem auto;">
+
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;background:linear-gradient(135deg,#0ea5e9,#14b8a6);border-radius:16px;font-size:1.6rem;margin-bottom:1.25rem;">🧬</div>
+
+        <h1>Allergy Prediction Result</h1>
+        <p class="subtitle">AI-powered medical insight based on your symptoms</p>
+
+        {% if alert %}
+        <div class="emergency-alert">
+            🚨 {{ alert }}
+        </div>
+        {% endif %}
+
+        <div class="result-row">
+            <span class="label">🧬 Allergy Type</span>
+            <span class="value">{{ allergy }}</span>
+        </div>
+
+        <div class="result-row">
+            <span class="label">⚠️ Severity Level</span>
+            <span class="value"><span class="severity {{ severity|lower }}">{{ severity }}</span></span>
+        </div>
+
+        <div class="result-row">
+            <span class="label">🎯 Risk Level</span>
+            <span class="value">
+                {% if severity == "High" %}
+                    <span style="color:#ef4444;font-weight:700;">High Risk</span>
+                {% elif severity == "Medium" %}
+                    <span style="color:#f59e0b;font-weight:700;">Moderate Risk</span>
+                {% else %}
+                    <span style="color:#10b981;font-weight:700;">Low Risk</span>
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="result-row">
+            <span class="label">📊 Risk Score</span>
+            <span class="value">
+                <div>
+                    <span style="font-weight:700;font-size:1.1rem;">{{ score if score else 0 }}<span style="color:#94a3b8;font-size:0.85rem;">/100</span></span>
+                    <div class="risk-bar-container" style="margin-top:6px;width:160px;">
+                        <div class="risk-bar" style="width:{{ score if score else 0 }}%"></div>
+                    </div>
+                </div>
+            </span>
+        </div>
+
+        <div class="result-row">
+            <span class="label">🔗 Cross Reactions</span>
+            <span class="value">
+                {% if allergy == "Food Allergy" %}Milk, Peanut, Seafood
+                {% elif allergy == "Environmental Allergy" %}Dust, Pollen, Pollution
+                {% elif allergy == "Skin Allergy" %}Soap, Chemical Creams
+                {% else %}None
+                {% endif %}
+            </span>
+        </div>
+
+        {% if ingredients and ingredients|length > 0 %}
+        <div class="section">
+            <h3>🍽️ Detected Ingredients</h3>
+            <ul>
+                {% for item in ingredients %}
+                <li>{{ item }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
+        <div class="section">
+            <h3>🧠 Why This Result? (Explainable AI)</h3>
+            <ul>
+                {% if reasons %}
+                    {% for r in reasons %}
+                    <li>{{ r }}</li>
+                    {% endfor %}
+                {% else %}
+                    <li>General symptom-based prediction</li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>🩺 AI Recommendations</h3>
+            <ul>
+                {% for rec in recommendations %}
+                <li>{{ rec }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h3>🌿 Lifestyle Tips</h3>
+            <ul>
+                {% for tip in lifestyle_tips %}
+                <li>{{ tip }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:1.75rem;flex-wrap:wrap;">
+            <a href="/predict" class="btn secondary">🔁 Try Another</a>
+            <a href="/dashboard" class="btn outline">← Dashboard</a>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

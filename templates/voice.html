@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Input | AI Allergy System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<nav class="topnav">
+    <a href="/dashboard" class="topnav-logo"><span>🧬 AI Allergy</span></a>
+    <div class="topnav-links">
+        <a href="/dashboard">🏠 Dashboard</a>
+        <a href="/predict">🤖 Predict</a>
+        <a href="/image">🖼 Image Scan</a>
+        <a href="/voice" class="active">🎙 Voice</a>
+        <a href="/history">📊 History</a>
+        <a href="/profile">👤 Profile</a>
+    </div>
+    <div class="topnav-right">
+        <a href="/logout" class="topnav-logout">Logout</a>
+    </div>
+</nav>
+
+<div class="center-wrapper text-bg" style="padding-top:80px;">
+
+    <div class="glass voice-card">
+
+        <div style="display:inline-flex;align-items:center;justify-content:center;width:56px;height:56px;background:linear-gradient(135deg,#0ea5e9,#14b8a6);border-radius:16px;font-size:1.6rem;margin-bottom:1.25rem;">🎤</div>
+
+        <h1>Voice-Based Prediction</h1>
+        <p class="subtitle">Speak your symptoms for AI analysis</p>
+
+        <div class="input-group" style="margin-bottom:1.25rem;">
+            <label>Select Language</label>
+            <select id="languageSelect">
+                <option value="en-US">English</option>
+                <option value="ta-IN">Tamil</option>
+            </select>
+        </div>
+
+        <!-- Mic visual bars -->
+        <div class="mic-visual" id="micVisual">
+            {% for i in range(9) %}
+            <div class="mic-bar" id="bar{{ i }}"></div>
+            {% endfor %}
+        </div>
+
+        <button id="voiceBtn" onclick="startVoice()" class="btn voice-btn">
+            🎙 Start Voice Input
+        </button>
+
+        <p id="voiceStatus" style="margin-top:0.75rem;font-size:0.875rem;color:#64748b;min-height:24px;text-align:center;"></p>
+
+        <form id="voiceForm" action="{{ url_for('voice') }}" method="POST">
+            <input id="voiceInput" type="hidden" name="voice_text">
+            <input id="languageInput" type="hidden" name="language">
+        </form>
+
+        <div class="hint">
+            <strong>Example (English):</strong> "I have milk allergy with skin rash"<br>
+            <strong>Example (Tamil):</strong> "எனக்கு பால் அலர்ஜி"
+        </div>
+
+        <a href="/dashboard" class="back-link">← Back to Dashboard</a>
+
+    </div>
+
+</div>
+
+<script>
+let animInterval;
+
+function animateBars(active) {
+    const bars = document.querySelectorAll('.mic-bar');
+    if (active) {
+        animInterval = setInterval(() => {
+            bars.forEach(b => {
+                const h = Math.floor(Math.random() * 40) + 8;
+                b.style.height = h + 'px';
+                b.style.opacity = '1';
+            });
+        }, 120);
+    } else {
+        clearInterval(animInterval);
+        bars.forEach(b => { b.style.height = '12px'; b.style.opacity = '0.3'; });
+    }
+}
+
+function startVoice() {
+    const btn = document.getElementById("voiceBtn");
+    const status = document.getElementById("voiceStatus");
+
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        status.textContent = "❌ Please use Google Chrome for voice recognition";
+        status.style.color = '#ef4444';
+        return;
+    }
+
+    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const selectedLang = document.getElementById("languageSelect").value;
+    recognition.lang = selectedLang;
+    document.getElementById("languageInput").value = selectedLang;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    status.textContent = "🎧 Listening... speak now";
+    status.style.color = '#0ea5e9';
+    btn.textContent = "🔴 Listening...";
+    btn.classList.add('listening');
+    btn.disabled = true;
+    animateBars(true);
+
+    recognition.start();
+
+    recognition.onresult = function(event) {
+        const speechText = event.results[0][0].transcript;
+        status.textContent = "✅ Heard: " + speechText;
+        status.style.color = '#10b981';
+        document.getElementById("voiceInput").value = speechText;
+        animateBars(false);
+        setTimeout(() => { document.getElementById("voiceForm").submit(); }, 700);
+    };
+
+    recognition.onerror = function(event) {
+        status.textContent = "❌ Error: " + event.error + ". Please try again.";
+        status.style.color = '#ef4444';
+        btn.textContent = "🎙 Start Voice Input";
+        btn.classList.remove('listening');
+        btn.disabled = false;
+        animateBars(false);
+    };
+
+    recognition.onend = function() {
+        btn.textContent = "🎙 Start Voice Input";
+        btn.classList.remove('listening');
+        btn.disabled = false;
+    };
+}
+</script>
+
+</body>
+</html>

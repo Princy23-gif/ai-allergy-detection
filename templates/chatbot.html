@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Allergy Chatbot</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #f2f2f2;
+        }
+        .chat-container {
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+        #chat-box {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .user {
+            text-align: right;
+            color: blue;
+            margin: 5px;
+        }
+        .bot {
+            text-align: left;
+            color: green;
+            margin: 5px;
+        }
+        input {
+            width: 80%;
+            padding: 5px;
+        }
+        button {
+            padding: 6px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <h2>AI Allergy Assistant</h2>
+
+    <div id="chat-box"></div>
+
+    <input type="text" id="user-input" placeholder="Type your symptoms...">
+    <button onclick="sendMessage()">Send</button>
+</div>
+
+<script>
+function sendMessage() {
+    let input = document.getElementById("user-input");
+    let message = input.value;
+
+    if (message === "") return;
+
+    let chatBox = document.getElementById("chat-box");
+
+    chatBox.innerHTML += "<div class='user'>" + message + "</div>";
+
+    fetch("/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(response => response.json())
+    .then(data => {
+        chatBox.innerHTML += "<div class='bot'>" + data.reply + "</div>";
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    input.value = "";
+}
+</script>
+
+</body>
+</html>
