@@ -1,4 +1,4 @@
-# 🤧 AI Allergy Detection System
+#  AI Allergy Detection System
 
 An intelligent web application that detects **Food, Skin, and Environment-based 
 allergies** using AI — supporting Voice, Chat, and Image inputs.
